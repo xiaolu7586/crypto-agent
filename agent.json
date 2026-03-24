@@ -1,0 +1,11 @@
+{
+  "id": "crypto-agent",
+  "name": "Crypto Trader",
+  "description": "AI-powered crypto trading assistant — wallet management, market analysis, and token swaps on Base network",
+  "version": "1.0.0",
+  "skills": [
+    "wallet-manager",
+    "market-info",
+    "trade-executor"
+  ]
+}
