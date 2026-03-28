@@ -1,8 +1,8 @@
 {
   "id": "crypto-agent",
   "name": "Crypto Trader",
-  "description": "Full-stack crypto trading agent — wallet management, DEX/CEX trading, market intelligence, and social signals across 20+ chains",
-  "version": "2.0.0",
+  "description": "Full-stack crypto trading agent — wallet management, DEX/CEX trading, prediction markets, market intelligence, and social signals across 20+ chains",
+  "version": "2.1.0",
   "skills": [
     "okx-agentic-wallet",
     "okx-dex-swap",
@@ -25,7 +25,8 @@
     "opentrade-token",
     "opentrade-gateway",
     "opentrade-newsliquid",
-    "opentrade-wallet"
+    "opentrade-wallet",
+    "polymarket"
   ],
   "tools": {
     "allow": [
