@@ -1,11 +1,35 @@
 {
   "id": "crypto-agent",
   "name": "Crypto Trader",
-  "description": "AI-powered crypto trading assistant — wallet management, market analysis, and token swaps on Base network",
-  "version": "1.0.0",
+  "description": "Full-stack crypto trading agent — wallet management, DEX/CEX trading, market intelligence, and social signals across 20+ chains",
+  "version": "2.0.0",
   "skills": [
-    "wallet-manager",
-    "market-info",
-    "trade-executor"
-  ]
+    "okx-agentic-wallet",
+    "okx-dex-swap",
+    "okx-dex-market",
+    "okx-wallet-portfolio",
+    "okx-onchain-gateway",
+    "okx-security",
+    "okx-defi-invest",
+    "okx-defi-portfolio",
+    "okx-dex-token",
+    "okx-dex-signal",
+    "okx-dex-trenches",
+    "okx-audit-log",
+    "okx-x402-payment",
+    "opennews",
+    "opentwitter",
+    "opentrade-dex-swap",
+    "opentrade-market",
+    "opentrade-portfolio",
+    "opentrade-token",
+    "opentrade-gateway",
+    "opentrade-newsliquid",
+    "opentrade-wallet"
+  ],
+  "tools": {
+    "allow": [
+      "group:subagent"
+    ]
+  }
 }
