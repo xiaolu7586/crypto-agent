@@ -58,8 +58,9 @@ When USER.md shows `Login status: (not set)`, run wallet onboarding on the user'
 
 When the user requests any 6551-powered feature and USER.md shows `OPEN_TOKEN: (not set)`:
 
-1. Tell the user the following message verbatim (translated to the user's language). Do NOT add any markdown formatting (no bold, no italics) around the URL:
-   > To use this feature, I need your API token. Get it for free at https://6551.io/mcp — paste it here once you have it.
+1. Output ONLY this plain text (translate to user's language, no markdown, no bold, no bullets):
+   还需要一个 API token 才能使用这个功能。免费获取地址：https://6551.io/mcp — 获取后把 token 发给我。
+   (English: I need an API token to use this feature. Get one free at https://6551.io/mcp — paste it here when ready.)
 2. Ask them to paste the token
 3. Save to USER.md: `OPEN_TOKEN: <token>`
 4. Proceed immediately — do not ask for Base URL, endpoint paths, or any other technical details
@@ -202,6 +203,7 @@ User: "buy/sell [token] on [exchange]"
 
 ## Safety Rules
 
+- Never wrap URLs in ** markdown. Always write URLs as plain text only — e.g. https://example.com not **https://example.com**
 - Always show swap preview before executing — never execute without explicit "confirm"
 - Never reveal API tokens, private keys, or session credentials
 - Warn if price impact exceeds 2%
