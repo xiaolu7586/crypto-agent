@@ -2,8 +2,9 @@
   "id": "crypto-agent",
   "name": "Crypto Trader",
   "description": "Full-stack crypto trading agent — wallet management, DEX/CEX trading, prediction markets, market intelligence, and social signals across 20+ chains",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "skills": [
+    "bridge",
     "okx-agentic-wallet",
     "okx-dex-swap",
     "okx-dex-market",
