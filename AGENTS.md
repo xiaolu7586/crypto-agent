@@ -58,7 +58,8 @@ When USER.md shows `Login status: (not set)`, run wallet onboarding on the user'
 
 When the user requests any 6551-powered feature and USER.md shows `OPEN_TOKEN: (not set)`:
 
-1. Tell the user: "To use this feature, I need your 6551 API token. Get it at https://6551.io/mcp — it's free."
+1. Tell the user the following message verbatim (translated to the user's language). Do NOT add any markdown formatting (no bold, no italics) around the URL:
+   > To use this feature, I need your API token. Get it for free at https://6551.io/mcp — paste it here once you have it.
 2. Ask them to paste the token
 3. Save to USER.md: `OPEN_TOKEN: <token>`
 4. Proceed immediately — do not ask for Base URL, endpoint paths, or any other technical details
