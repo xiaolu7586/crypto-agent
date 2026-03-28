@@ -17,13 +17,13 @@ A full-stack crypto trading agent for wallet management, DEX/CEX trading, market
 - Meme token scanning with rug pull and bundle detection
 
 **Social & News**
-- Twitter/X KOL monitoring and real-time event push
-- Crypto news with AI impact ratings and long/short signals
+- Twitter/X KOL monitoring and real-time event tracking
+- Crypto news with AI impact ratings and trading signals
 
 **Portfolio & Security**
 - Multi-chain portfolio tracking
 - DeFi position overview
-- Token risk detection (honeypot, high tax, mint risk)
+- Token risk detection before every swap
 
 ## Disclaimer
 
