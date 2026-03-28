@@ -22,9 +22,14 @@ onchainos --version
 ```bash
 # Check if installed
 if ! command -v opentrade &>/dev/null; then
-  curl -sSL https://raw.githubusercontent.com/6551Team/openskills/main/install.sh | sh
+  curl -sSL https://raw.githubusercontent.com/6551Team/openskills/main/skills/opentrade/install.sh | sh
 fi
 opentrade --version
+```
+
+Before running any opentrade command, export the token:
+```bash
+export OPEN_TOKEN=$(grep OPEN_TOKEN USER.md | awk '{print $NF}')
 ```
 
 If either installation fails, tell the user clearly which tool failed and ask them to check their network connection or contact platform support. Do not proceed with any commands that depend on the missing tool.
@@ -109,7 +114,7 @@ Check USER.md `security_scan` before every swap.
 ### If security_scan: enabled (default)
 Before every DEX swap, run:
 ```bash
-onchainos security token-scan --token <buy_token_address> --chain <chain>
+onchainos security token-scan --tokens "<chainId>:<buy_token_address>"
 ```
 
 - `action: ""` (empty) → safe, proceed
@@ -140,7 +145,7 @@ User: "swap X [token] to [token]"
      onchainos swap quote --from <addr> --to <addr> --amount <min_units> --chain <chain>
 
   2. Security scan (if enabled):
-     onchainos security token-scan --token <buy_token> --chain <chain>
+     onchainos security token-scan --tokens "<chainId>:<buy_token_address>"
 
   3. Show preview to user:
      - Sell: amount + token
