@@ -26,4 +26,11 @@
 - confirmation_required: yes
 - language: (auto-detected)
 
+## Polymarket
+- api_key: (not set)
+- api_secret: (not set)
+- api_passphrase: (not set)
+- usdc_approved: false
+- ctoken_approved: false
+
 ## Trade History
