@@ -1,14 +1,29 @@
-## Wallet
-<\!-- Filled automatically on first run -->
-- Base address: (not set)
-- Wallet ID: (not set)
-- Created: (not set)
+## OKX Account
+- Account ID: (not set)
+- Login status: (not set)
+
+## Wallet Addresses
+- EVM (all EVM chains): (not set)
+- Solana: (not set)
+
+## 6551 Token
+- OPEN_TOKEN: (not set)
+
+## Data Source Preferences
+- market_data: okx
+- token_research: okx
+- portfolio_query: okx
+- signals: okx
+- meme_scan: okx
+- gas: okx
+
+## Security Scan
+- security_scan: enabled
 
 ## Preferences
-- Risk level: moderate
-- Default slippage: 0.5%
-- Confirmation required: yes
-- Language: (auto-detected from user)
+- risk_level: moderate
+- default_slippage: 0.5%
+- confirmation_required: yes
+- language: (auto-detected)
 
 ## Trade History
-<\!-- Agent appends trade summaries here over time -->
