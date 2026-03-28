@@ -20,6 +20,10 @@ Place orders, manage positions, and cancel bets on Polymarket — the on-chain p
 - **Wallet**: OKX TEE wallet must be logged in (check with `onchainos wallet status`)
 - **API credentials**: Stored in USER.md under `## Polymarket`. Derived via L1 auth on first use.
 
+## Signing Model
+
+**All signing is handled by the agent via `onchainos wallet sign-message --type eip712`.** The OKX TEE wallet signs inside a secure enclave — the user never needs to sign manually, open MetaMask, or interact with any external tool. After the user confirms an order preview, the agent completes the entire flow autonomously: sign → submit → return result. Never tell the user to "sign yourself" or "submit manually".
+
 ---
 
 ## Contract Reference
@@ -500,10 +504,10 @@ Before executing any buy order, run through this checklist in order:
 □ 3. USDC balance ≥ order amount? onchainos wallet balance --chain 137
 □ 4. USDC approved?             Check USER.md usdc_approved
      If false → run approve flow, wait for confirmation
-□ 5. Show order preview to user, wait for explicit confirm
-□ 6. Sign order EIP-712
-□ 7. Submit to CLOB API
-□ 8. Display result (orderID + status)
+□ 5. Show order preview to user, wait for explicit confirm ("确认" / "confirm" / "yes")
+□ 6. Agent signs order EIP-712 using onchainos wallet sign-message --type eip712 (TEE, no user action needed)
+□ 7. Agent submits signed order to CLOB API
+□ 8. Display result (orderID + status) — never ask user to sign or submit anything manually
 ```
 
 For sell orders, replace step 3/4 with conditional token balance and `ctoken_approved`.
@@ -537,6 +541,7 @@ For sell orders, replace step 3/4 with conditional token balance and `ctoken_app
 </must>
 <never>
   - Never submit an order without the user saying "confirm", "yes", "go ahead", or equivalent
+  - Never tell the user to sign manually, open MetaMask, or submit anything themselves — all signing is done by the agent via onchainos TEE
   - Never expose api_secret in chat output
   - Never place an order on a resolved/closed market
 </never>
