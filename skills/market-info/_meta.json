@@ -1,8 +1,0 @@
-{
-  "name": "market-info",
-  "display_name": "Market Info",
-  "description": "Real-time crypto prices, market data, and Base network gas fees",
-  "version": "1.0.0",
-  "category": "crypto",
-  "tags": ["price", "market", "gas", "crypto", "coingecko"]
-}
