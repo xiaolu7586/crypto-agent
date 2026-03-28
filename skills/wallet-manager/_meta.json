@@ -1,8 +1,0 @@
-{
-  "name": "wallet-manager",
-  "display_name": "Wallet Manager",
-  "description": "Manage your crypto wallet — check balance, send tokens, get deposit address",
-  "version": "1.0.0",
-  "category": "crypto",
-  "tags": ["wallet", "balance", "send", "crypto", "base"]
-}
