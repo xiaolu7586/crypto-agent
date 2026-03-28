@@ -46,7 +46,7 @@ onchainos market portfolio-overview --address <addr> --chain <chain>
 
 ### okx-security
 ```bash
-onchainos security token-scan --token <addr> --chain <chain>
+onchainos security token-scan --tokens "<chainId>:<addr>"   # e.g. "8453:0x833589..."
 onchainos security tx-scan --from <addr> --to <addr> --chain <chain>
 onchainos security approvals --address <addr> --chain <chain>
 ```
@@ -60,7 +60,7 @@ onchainos gateway broadcast --signed-tx <hex> --address <addr> --chain <chain>
 
 ### okx-dex-token
 ```bash
-onchainos token search <query>
+onchainos token search --query <query>
 onchainos token info --address <addr> --chain <chain>
 ```
 
