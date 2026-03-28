@@ -1,93 +1,67 @@
-# Crypto Trader — ClawDI Agent
+# Crypto Trader
 
-An AI-powered crypto trading assistant for [ClawDI](https://www.clawdi.ai/). Manage your wallet, track markets, and execute token swaps on Base network — all through natural conversation.
+A full-stack crypto trading agent for the ClawDI platform. Combines OKX wallet infrastructure with 6551 market intelligence to cover the complete trading workflow: research → signal → decide → execute.
 
-## What it does
+## What It Does
 
-- **Wallet management** — automatic wallet creation on first use, balance tracking, deposits and transfers
-- **Market data** — real-time token prices, 24h change, and Base network gas fees
-- **Token swaps** — get quotes and execute swaps via 0x Protocol with mandatory confirmation
+| Category | Capabilities |
+|----------|-------------|
+| **Wallet** | Multi-chain wallet via OKX (20+ chains), Email OTP setup, balance, send |
+| **DEX Trading** | Swap execution across 20+ chains, security scan before every trade |
+| **CEX Trading** | Spot & futures on Binance, Bybit, OKX, Hyperliquid via 6551 |
+| **DeFi** | Deposit/withdraw on Aave, Lido, Compound, and more |
+| **Market Data** | Real-time prices, K-lines, gas fees |
+| **Research** | Token metadata, holder distribution, trending tokens |
+| **Signals** | Smart money, whale, KOL on-chain signals |
+| **Meme Tokens** | Pump.fun/meme token scanning, rug pull and bundle detection |
+| **Social Intel** | Twitter/X KOL monitoring, real-time push events |
+| **News** | Crypto news with AI impact ratings and trading signals |
+| **Security** | Token honeypot detection, transaction simulation, approval management |
+| **Portfolio** | Multi-chain portfolio tracking and DeFi position overview |
 
-## Quick Start
+## Setup
 
-### 1. Prerequisites
-- A [ClawDI](https://www.clawdi.ai/) account with this agent installed
-- Wallet infrastructure credentials (set by platform admin)
-- A [0x Protocol API key](https://0x.org/docs/introduction/getting-started) (free tier available)
+### Step 1 — Get your 6551 token
+Visit https://6551.io/mcp and get your `OPEN_TOKEN`.
 
-### 2. Configure environment
-```bash
-cp .env.example .env
-# Edit .env and fill in your API keys
-```
+### Step 2 — Start the agent
+Send any message. The agent will:
+1. Auto-install required tools (`onchainos` + `opentrade`)
+2. Guide you through OKX wallet creation (email + OTP, one time only)
+3. Ask for your 6551 token on first use of news/Twitter/CEX features
 
-### 3. Install dependencies
-```bash
-pip install -r requirements.txt
-```
+### Step 3 — Start trading
+Your wallet is ready. Deposit funds and start trading.
 
-### 4. Start chatting
-Open ClawDI and say anything — your wallet is created automatically on first message.
+## Data Sources
+
+By default, wallet and trading execution use OKX. Market data, research, and signals also default to OKX but can be switched to 6551:
+
+- **Temporary**: "Use 6551 to check ETH price"
+- **Persistent**: "Use 6551 for market data from now on"
+- **Switch back**: "Switch back to OKX for market data"
+
+## Security Scan
+
+Security scanning is **enabled by default** for all DEX swaps. To disable:
+> "Turn off security scan"
+
+The agent will warn you and ask for confirmation. To re-enable:
+> "Enable security scan"
+
+## Supported Chains
+
+Ethereum, Base, BSC, Arbitrum, Solana, XLayer, Polygon, and 15+ more.
+Run `onchainos wallet chains` for the full list.
 
 ## Skills
 
-| Skill | Description |
-|-------|-------------|
-| `wallet-manager` | Create wallet, check balance, send tokens, get deposit address |
-| `market-info` | Real-time prices, 24h change, gas fees |
-| `trade-executor` | Swap token quotes and execution with confirmation |
+Powered by 22 skills from OKX and 6551:
 
-## Repo Structure
+**OKX (13):** okx-agentic-wallet, okx-dex-swap, okx-dex-market, okx-wallet-portfolio, okx-onchain-gateway, okx-security, okx-defi-invest, okx-defi-portfolio, okx-dex-token, okx-dex-signal, okx-dex-trenches, okx-audit-log, okx-x402-payment
 
-```
-crypto-agent/
-├── AGENTS.md              # Core system prompt
-├── TOOLS.md               # Runtime environment reference
-├── SOUL.md                # Behavioral philosophy
-├── IDENTITY.md            # Agent persona
-├── USER.md                # User profile (wallet address, preferences)
-├── HEARTBEAT.md           # Scheduled tasks placeholder
-├── requirements.txt       # Python dependencies
-├── .env.example           # Environment variable template
-└── skills/
-    ├── wallet-manager/    # Wallet creation, balance, transfers
-    ├── market-info/       # Token prices and gas fees
-    └── trade-executor/    # Swap quotes and execution
-```
-
-## Environment Variables
-
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `PRIVY_APP_ID` | ✅ | Wallet infrastructure App ID |
-| `PRIVY_APP_SECRET` | ✅ | Wallet infrastructure App Secret |
-| `ZERO_X_API_KEY` | ✅ | [0x Protocol](https://0x.org) API key |
-| `BASE_RPC_URL` | Optional | Base RPC (default: mainnet.base.org) |
-| `COINGECKO_API_KEY` | Optional | CoinGecko Pro key (free tier works without) |
-
-## Supported Tokens (Base Network)
-
-ETH · USDC · USDT · DAI · WETH · cbETH
-
-## Platform Capabilities Required
-
-The following platform-level features will improve this agent when implemented in ClawDI:
-
-| Feature | Impact |
-|---------|--------|
-| **Secrets injection** | Users never need to configure `.env` — credentials injected by platform |
-| **Skill scanning mandate** | Forces full SKILL.md + references to load before every reply |
-| **Workspace file auto-load** | SOUL.md, IDENTITY.md, USER.md injected into context at session start |
-| **Runtime metadata** | Current datetime and timezone injected per session |
-
-## Version Roadmap
-
-| Version | Features |
-|---------|---------|
-| **V1 (current)** | Wallet creation · Balance · Send · Market prices · Token swaps on Base |
-| **V2** | AI trade advisor (bull/bear analysis, 5-tier signal) · Portfolio tracker |
-| **V3** | Solana support · Price alerts · Conditional orders · DeFi yields (Aave/Morpho) |
+**6551 (9):** opennews, opentwitter, opentrade-dex-swap, opentrade-market, opentrade-portfolio, opentrade-token, opentrade-gateway, opentrade-newsliquid, opentrade-wallet
 
 ## Disclaimer
 
-This agent is for informational and utility purposes only. It is not financial advice. Crypto assets are volatile. Always verify transaction details before confirming. You are solely responsible for your trading decisions.
+This agent is a tool, not a financial advisor. All trading decisions are yours. Crypto markets are volatile — only trade what you can afford to lose.
