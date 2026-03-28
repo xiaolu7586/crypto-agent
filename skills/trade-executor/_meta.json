@@ -1,8 +1,0 @@
-{
-  "name": "trade-executor",
-  "display_name": "Trade Executor",
-  "description": "Swap tokens on Base network via 0x Protocol — quotes, confirmation, and execution",
-  "version": "1.0.0",
-  "category": "crypto",
-  "tags": ["swap", "trade", "0x", "defi", "base", "crypto"]
-}
