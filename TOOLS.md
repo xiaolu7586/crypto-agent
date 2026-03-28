@@ -1,54 +1,214 @@
 # Tools & Runtime Reference
 
-## Runtime Environment
-- Platform: ClawDI / OpenClaw
-- Script execution: `python3` (direct — not uv)
-- Working directory: agent workspace root
-- Install dependencies: `pip install -r requirements.txt -q`
+## CLI Tools Required
 
-## Environment Variables
-Copy `.env.example` to `.env` and fill in your values.
+| Tool | Purpose | Install |
+|------|---------|---------|
+| `onchainos` | OKX wallet, DEX swap, DeFi, market data | Auto-installed via preflight in AGENTS.md |
+| `opentrade` | 6551 market data, token research, DEX quotes | Auto-installed via preflight in AGENTS.md |
+| `curl` | 6551 news, Twitter, CEX trading API calls | Pre-installed on most systems |
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `PRIVY_APP_ID` | ✅ | Wallet infrastructure App ID |
-| `PRIVY_APP_SECRET` | ✅ | Wallet infrastructure App Secret |
-| `ZERO_X_API_KEY` | ✅ | 0x Protocol API key for swaps |
-| `BASE_RPC_URL` | Optional | Base RPC endpoint (default: mainnet.base.org) |
-| `COINGECKO_API_KEY` | Optional | CoinGecko Pro key (free tier works without) |
+## Credentials
 
-## Network
-| Network | Chain ID | Explorer |
-|---------|----------|---------|
-| Base Mainnet | 8453 | https://basescan.org |
+| Variable | Source | Stored in |
+|----------|--------|-----------|
+| OKX session (JWT) | `onchainos wallet login` flow | OS keyring (auto-managed) |
+| `OPEN_TOKEN` | https://6551.io/mcp | USER.md |
 
-## Supported Tokens (Base)
-| Token | Type | Contract |
-|-------|------|---------|
-| ETH | Native gas token | — |
-| USDC | Stablecoin | 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913 |
-| USDT | Stablecoin | 0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2 |
-| DAI | Stablecoin | 0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb |
-| WETH | Wrapped ETH | 0x4200000000000000000000000000000000000006 |
-| cbETH | Liquid staking | 0x2Ae3F1Ec7F1F5012CFEab0185bfc7aa3cf0DEc22 |
+## OKX Skills — Command Reference
 
-## Script Reference
-| Script | Arguments | Output |
-|--------|-----------|--------|
-| `skills/wallet-manager/scripts/create_wallet.py` | none | `{wallet_id, address, chain, network}` |
-| `skills/wallet-manager/scripts/get_balance.py` | `<address>` | `{address, network, balances}` |
-| `skills/wallet-manager/scripts/send_token.py` | `<wallet_id> <to> <token> <amount>` | `{status, tx_hash, explorer}` |
-| `skills/market-info/scripts/get_price.py` | `<TOKEN> [...]` | `{symbol: {price, change_24h, ...}}` |
-| `skills/market-info/scripts/get_gas.py` | none | `{gas_price_gwei, estimated_costs}` |
-| `skills/trade-executor/scripts/get_quote.py` | `<sell> <buy> <amount>` | `{sell, buy, rate, price_impact, gas}` |
-| `skills/trade-executor/scripts/execute_swap.py` | `<wallet_id> <addr> <sell> <buy> <amount>` | `{status, tx_hash, explorer}` |
+### okx-agentic-wallet
+```bash
+onchainos wallet status                          # Check login state
+onchainos wallet login <email>                   # Start OTP login
+onchainos wallet verify <otp>                    # Complete login
+onchainos wallet addresses [--chain <chainId>]   # List wallet addresses
+onchainos wallet balance [--chain <chainId>]     # Token balances
+onchainos wallet send --amt <min_units> --receipt <addr> --chain <chainId>
+onchainos wallet history                         # Transaction history
+onchainos wallet logout                          # Clear session
+```
 
-## Platform Capabilities Required
-The following platform-level features will improve this agent when implemented in ClawDI:
+### okx-dex-swap
+```bash
+onchainos swap quote --from <addr> --to <addr> --amount <min_units> --chain <chain>
+onchainos swap execute --from <addr> --to <addr> --amount <min_units> --chain <chain> --wallet <addr>
+onchainos swap chains                            # Supported chains
+```
 
-| Feature | Description |
-|---------|-------------|
-| **Secrets injection** | Platform injects `PRIVY_APP_ID`, `PRIVY_APP_SECRET`, `ZERO_X_API_KEY` automatically — users never need to configure `.env` |
-| **Skill scanning mandate** | Platform forces full SKILL.md + references to load before every reply |
-| **Workspace file auto-load** | SOUL.md, IDENTITY.md, USER.md auto-injected into context at session start |
-| **Runtime metadata** | Current datetime, timezone, model name injected per session |
+### okx-dex-market
+```bash
+onchainos market price --address <addr>
+onchainos market prices --tokens <chainIndex:addr,...>
+onchainos market kline --address <addr> [--bar 1m|5m|1H|1D]
+onchainos market portfolio-overview --address <addr> --chain <chain>
+```
+
+### okx-security
+```bash
+onchainos security token-scan --token <addr> --chain <chain>
+onchainos security tx-scan --from <addr> --to <addr> --chain <chain>
+onchainos security approvals --address <addr> --chain <chain>
+```
+
+### okx-onchain-gateway
+```bash
+onchainos gateway gas --chain <chain>
+onchainos gateway simulate --from <addr> --to <addr> --data <hex> --chain <chain>
+onchainos gateway broadcast --signed-tx <hex> --address <addr> --chain <chain>
+```
+
+### okx-dex-token
+```bash
+onchainos token search <query>
+onchainos token info --address <addr> --chain <chain>
+```
+
+### okx-dex-signal
+```bash
+onchainos signal list --chain <chain> --wallet-type 1  # 1=Smart Money, 2=KOL, 3=Whale
+```
+
+### okx-dex-trenches (Meme tokens)
+```bash
+onchainos memepump tokens <chain> --stage NEW|MIGRATING|MIGRATED
+onchainos memepump token-details <addr> --chain <chain>
+```
+
+### okx-defi-invest
+```bash
+onchainos defi list [--chain <chain>]
+onchainos defi invest --platform <id> --amount <amount> --chain <chain>
+onchainos defi withdraw --position <id>
+onchainos defi positions --address <addr>
+```
+
+### okx-wallet-portfolio
+```bash
+onchainos portfolio total-value --address <addr> --chains <chains>
+onchainos portfolio all-balances --address <addr> --chains <chains>
+```
+
+### okx-x402-payment
+```bash
+onchainos payment x402-pay --network eip155:<chainId> --amount <min_units> --pay-to <addr> --asset <token_addr>
+```
+
+---
+
+## 6551 Skills — Command Reference
+
+**Base URL:** `https://ai.6551.io`
+**Auth:** `Authorization: Bearer $OPEN_TOKEN`
+
+### opentwitter (Twitter/X data)
+```bash
+# Get user tweets
+curl -s -X POST "https://ai.6551.io/open/twitter_user_tweets" \
+  -H "Authorization: Bearer $OPEN_TOKEN" -H "Content-Type: application/json" \
+  -d '{"username": "VitalikButerin", "maxResults": 10}'
+
+# Search tweets
+curl -s -X POST "https://ai.6551.io/open/twitter_search" \
+  -H "Authorization: Bearer $OPEN_TOKEN" -H "Content-Type: application/json" \
+  -d '{"keywords": "bitcoin", "minLikes": 100, "product": "Top", "maxResults": 20}'
+
+# Get KOL followers
+curl -s -X POST "https://ai.6551.io/open/twitter_kol_followers" \
+  -H "Authorization: Bearer $OPEN_TOKEN" -H "Content-Type: application/json" \
+  -d '{"username": "elonmusk"}'
+
+# Endpoints: twitter_user_info, twitter_user_by_id, twitter_user_tweets,
+#            twitter_search, twitter_follower_events, twitter_deleted_tweets,
+#            twitter_kol_followers, twitter_tweet_by_id, twitter_watch,
+#            twitter_watch_add, twitter_watch_delete
+```
+
+### opennews (Crypto news + AI signals)
+```bash
+# Search crypto news
+curl -s -X POST "https://ai.6551.io/open/news_search" \
+  -H "Authorization: Bearer $OPEN_TOKEN" -H "Content-Type: application/json" \
+  -d '{"limit": 20, "page": 1, "coins": ["BTC", "ETH"]}'
+
+# High-impact news only (aiRating.score >= 80)
+curl -s -X POST "https://ai.6551.io/open/news_search" \
+  -H "Authorization: Bearer $OPEN_TOKEN" -H "Content-Type: application/json" \
+  -d '{"limit": 10, "page": 1, "q": "bitcoin ETF"}'
+```
+
+### opentrade-market (Market data, signals, meme)
+```bash
+opentrade market price <address> [--chain <chainIndex>]
+opentrade market prices <chainIndex:address,...>
+opentrade market kline <address> [--bar 1m|1H|1D] [--chain <chainIndex>]
+opentrade market signal-list <chain> [--wallet-type 1|2|3]
+opentrade market memepump-tokens <chain> --stage NEW|MIGRATING|MIGRATED
+opentrade market memepump-token-details <address> [--chain <chain>]
+```
+
+### opentrade-token (Token research)
+```bash
+opentrade token search <query> [--chains "1,501"]
+opentrade token price-info <address> [--chain <chainIndex>]
+opentrade token toplist [--sort-by 2|5|6] [--time-frame 1|2|3|4]
+opentrade token holders <address> [--chain <chainIndex>]
+```
+
+### opentrade-portfolio (Wallet balance)
+```bash
+opentrade portfolio total-value --address <addr> --chains <chains>
+opentrade portfolio all-balances --address <addr> --chains <chains>
+opentrade portfolio token-balances --address <addr> --tokens "chainIndex:address,..."
+```
+
+### opentrade-gateway (Gas, simulate, broadcast)
+```bash
+opentrade gateway gas --chain <chainIndex>
+opentrade gateway simulate --from <addr> --to <addr> --chain <chainIndex>
+opentrade gateway broadcast --signed-tx <hex_or_base58> --address <addr> --chain <chainIndex>
+```
+
+### opentrade-newsliquid (CEX trading)
+```bash
+# Base URL: https://ai.6551.io (with OPEN_TOKEN)
+# Get config: GET /config
+# Place order: POST /orders
+# Close position: POST /positions/close
+# Supported exchanges: Binance, Bybit, OKX, Hyperliquid, Aster
+```
+
+### opentrade-wallet (6551 custodial wallet — BSC + Solana only)
+```bash
+# Create wallet
+curl -s -X POST "https://ai.6551.io/trader/custodial/create" \
+  -H "Authorization: Bearer $OPEN_TOKEN" -H "Content-Type: application/json" -d '{}'
+
+# Swap (BSC/Solana only)
+curl -s -X POST "https://ai.6551.io/trader/custodial/swap" \
+  -H "Authorization: Bearer $OPEN_TOKEN" -H "Content-Type: application/json" \
+  -d '{"chainIndex": "56", "fromTokenAddress": "...", "toTokenAddress": "...", "amount": "..."}'
+```
+
+---
+
+## Chain Reference
+
+| Chain | chainIndex | Native Token |
+|-------|-----------|-------------|
+| Ethereum | 1 | ETH |
+| Base | 8453 | ETH |
+| BSC | 56 | BNB |
+| Arbitrum | 42161 | ETH |
+| Solana | 501 | SOL |
+| XLayer | 196 | OKB |
+
+**Native token addresses for DEX:**
+- EVM: `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`
+- Solana swap: `11111111111111111111111111111111`
+- Solana K-line: `So11111111111111111111111111111111111111112` (wSOL)
+
+## Amount Format
+- All swap/send amounts are in minimal units: `amount × 10^decimals`
+- Portfolio balance output is in UI units — convert before using in swaps
+- CEX trading uses standard units (e.g. `0.1` BTC, not wei)
