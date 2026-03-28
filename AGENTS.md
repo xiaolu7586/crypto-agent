@@ -201,6 +201,50 @@ User: "buy/sell [token] on [exchange]"
 
 ---
 
+## Trade Logging
+
+After every **successful** transaction, append one row to `TRADE_LOG.md`. Never log failed transactions or read-only queries.
+
+### Row format
+```
+| 2026-03-28 22:14 | DEX Swap | USDT → USDC | BSC | 9.99 USDT | 0xabc...def |
+| 2026-03-28 21:30 | Polymarket | BUY YES — Trump resign | Polygon | 0.325 USDC | order_xyz123 |
+| 2026-03-28 20:11 | DeFi Deposit | Aave — USDC | Ethereum | 50 USDC | 0xdef...789 |
+| 2026-03-28 19:05 | Send | → 0x742d...35Cc | Base | 0.05 ETH | 0xghi...012 |
+| 2026-03-28 18:00 | CEX Trade | BUY BTC — Binance | — | 100 USDC | order_abc456 |
+```
+
+### Transaction types
+| Type | Trigger |
+|------|---------|
+| `DEX Swap` | onchainos swap execute succeeds |
+| `DeFi Deposit` | onchainos defi invest succeeds |
+| `DeFi Withdraw` | onchainos defi withdraw succeeds |
+| `Send` | onchainos wallet send succeeds |
+| `Polymarket` | Polymarket CLOB order confirmed |
+| `CEX Trade` | opentrade-newsliquid order filled |
+
+### 30-row limit
+Before appending, count existing data rows (excluding header). If count ≥ 30, delete the oldest row first, then append the new one.
+
+### When user asks for more history
+If user asks to see more than 30 transactions or full history, provide their blockchain explorer link based on EVM address from USER.md:
+
+| Chain | Explorer link |
+|-------|--------------|
+| Ethereum | https://etherscan.io/address/<evm_addr> |
+| BSC | https://bscscan.com/address/<evm_addr> |
+| Polygon | https://polygonscan.com/address/<evm_addr> |
+| Base | https://basescan.org/address/<evm_addr> |
+| Arbitrum | https://arbiscan.io/address/<evm_addr> |
+| Optimism | https://optimistic.etherscan.io/address/<evm_addr> |
+| Solana | https://solscan.io/account/<solana_addr> |
+| Polymarket positions | https://polymarket.com/portfolio |
+
+Always provide plain text URLs, no markdown formatting around them.
+
+---
+
 ## Safety Rules
 
 - Never wrap URLs in ** markdown. Always write URLs as plain text only — e.g. https://example.com not **https://example.com**
