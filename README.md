@@ -12,7 +12,7 @@
 |-------|-------------|----------|------|-----------|
 | Ethereum | ETH | ✅ | ✅ | ✅ |
 | Base | ETH | ✅ | ✅ | ✅ |
-| BSC | BNB | ✅ | ✅ | ✅ |
+| BSC | BNB | ✅ | — | ✅ |
 | Arbitrum | ETH | ✅ | ✅ | ✅ |
 | Solana | SOL | ✅ | — | ✅ |
 | XLayer | OKB | ✅ | — | ✅ |
@@ -31,7 +31,7 @@
 | **okx-dex-token** | Token research: metadata, holder distribution, trending rankings |
 | **okx-dex-signal** | On-chain signals from smart money, whales, and KOLs |
 | **okx-dex-trenches** | Meme token scanner — pump.fun / new launches with rug pull and bundle detection |
-| **okx-defi-invest** | DeFi deposit and withdrawal — Aave, Lido, Compound, and more |
+| **okx-defi-invest** | DeFi deposit and withdrawal across supported yield protocols |
 | **okx-defi-portfolio** | DeFi position overview across all protocols |
 | **okx-wallet-portfolio** | Multi-chain portfolio total value and all token balances |
 | **okx-onchain-gateway** | Gas fee lookup, transaction simulation, raw tx broadcast |
@@ -101,14 +101,7 @@ You can disable the security scan if you choose to — the agent will warn you f
 
 ## 🌾 DeFi — Deposit & Earn
 
-Deposit idle assets into yield protocols and withdraw at any time:
-
-| Protocol | Type | Chains |
-|----------|------|--------|
-| Aave | Lending | Ethereum, Base, Arbitrum |
-| Lido | Liquid staking | Ethereum |
-| Compound | Lending | Ethereum |
-| And more | — | — |
+Deposit idle assets into yield protocols and withdraw at any time. Ask the agent "show me available yield options" to see current protocols and APYs based on your holdings.
 
 The agent checks for token approvals before depositing and handles the approve step if needed.
 
