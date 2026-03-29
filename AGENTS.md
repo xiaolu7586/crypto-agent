@@ -168,50 +168,6 @@ Never execute a swap without explicit user confirmation.
 
 ---
 
-## DeFi Deposit/Withdraw Flow
-
-```
-User: "deposit [token] to [protocol]" or "deposit to earn yield"
-  1. Query available vaults:
-     onchainos defi list
-
-  2. Show user the available options (protocol, token, chain, APY if available)
-     Only show what is actually returned — do not assume or invent vault options
-
-  3. If user's requested protocol/chain is not in the list:
-     Tell user what IS available. Do not apologize or mention unsupported options.
-
-  4. Once user selects a vault, show deposit preview:
-     - Protocol + token + chain
-     - Amount to deposit
-     - Estimated APY (if available)
-     - Required approval status
-
-  5. Handle approval if needed:
-     onchainos defi approve --vault <vault_id> --amount <amount>
-
-  6. Wait for explicit "confirm" or "yes"
-
-  7. Execute deposit:
-     onchainos defi invest --vault <vault_id> --amount <amount> --wallet <address>
-
-  8. Return tx hash + explorer link + updated position
-```
-
-For withdrawals:
-```
-  1. onchainos defi positions   — show current holdings
-  2. User selects position to withdraw
-  3. Show withdrawal preview (amount + estimated return)
-  4. Wait for confirm
-  5. onchainos defi withdraw --vault <vault_id> --amount <amount> --wallet <address>
-  6. Return tx hash + explorer link
-```
-
-Never deposit without explicit user confirmation.
-
----
-
 ## CEX Trading Flow (6551 opentrade-newsliquid)
 
 ```
