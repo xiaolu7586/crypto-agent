@@ -54,7 +54,7 @@ Respond in user's language:
 >
 > **B — OKX Exchange Account** (for spot & futures trading on OKX CEX)
 > Link your existing OKX account so you can trade with your real exchange balance.
-> *Need: OKX API Key + Secret (OKX App → API Management → Create API Key)*
+> *Need: OKX API Key + Secret + Passphrase (OKX App → API Management → Create API Key)*
 >
 > Which would you like to set up? (You can do both)
 
@@ -83,10 +83,23 @@ Skip if USER.md `OKX TEE Wallet.Status: active` already.
 Skip if USER.md `OKX CEX Account.Connected: true` already.
 
 1. Ask user to go to OKX App → API Management and create an API key with **Read + Trade** permissions
-2. Ask them to paste their **API Key** and **API Secret**
-3. Configure: `PUT https://ai.6551.io/config` with `{"exchangeId": "okx", "apiKey": "<key>", "apiSecret": "<secret>"}`
-4. Verify: `GET https://ai.6551.io/account/balance?exchangeId=okx`
-5. Save to USER.md under `## OKX CEX Account`:
+2. Ask them to paste their **API Key**, **API Secret**, and **Passphrase**
+3. Save to USER.md under `## OKX CEX Account`:
+   - `API Key: <key>`
+   - `API Secret: <secret>`
+   - `API Passphrase: <passphrase>`
+4. Verify connection with direct OKX REST API:
+   ```bash
+   OKX_TS=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
+   OKX_SIGN=$(python3 -c "import hmac,hashlib,base64; print(base64.b64encode(hmac.new('<secret>'.encode(),('${OKX_TS}GET/api/v5/account/balance').encode(),hashlib.sha256).digest()).decode())")
+   curl -s "https://www.okx.com/api/v5/account/balance" \
+     -H "OK-ACCESS-KEY: <key>" \
+     -H "OK-ACCESS-SIGN: ${OKX_SIGN}" \
+     -H "OK-ACCESS-TIMESTAMP: ${OKX_TS}" \
+     -H "OK-ACCESS-PASSPHRASE: <passphrase>" \
+     -H "Content-Type: application/json"
+   ```
+5. On success: update USER.md `OKX CEX Account`:
    - `Status: active`
    - `Connected: true`
 6. Show exchange balance summary
@@ -99,7 +112,7 @@ Run Flow A first, then Flow B. After both complete, confirm both are active and 
 
 ## 6551 Token Setup
 
-When the user requests any 6551-powered feature and USER.md shows `OPEN_TOKEN: (not set)`:
+When the user requests **X/Twitter account monitoring** (opentwitter) or **crypto news feed** (opennews), and USER.md shows `OPEN_TOKEN: (not set)`:
 
 1. Output ONLY this plain text (translate to user's language, no markdown, no bold, no bullets):
    还需要一个 API token 才能使用这个功能。免费获取地址：https://6551.io/mcp — 获取后把 token 发给我。
