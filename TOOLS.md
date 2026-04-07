@@ -98,43 +98,61 @@ onchainos payment x402-pay --network eip155:<chainId> --amount <min_units> --pay
 
 ## 6551 Skills — Command Reference
 
-**Base URL:** `https://ai.6551.io`
-**Auth:** `Authorization: Bearer $OPEN_TOKEN`
+**Direct 6551 skills** use `https://ai.6551.io` with `Authorization: Bearer $OPEN_TOKEN`.
+**Proxied skills** (opentwitter, opennews) use `https://api.clawdi.ai/proxy/*` with `Authorization: Bearer $CLAWDI_PROXY_TOKEN`.
 
-### opentwitter (Twitter/X data)
+### opentwitter (Twitter/X data) — via Clawdi proxy
 ```bash
+# Base URL: https://api.clawdi.ai/proxy/opentwitter
+# Auth: Authorization: Bearer $CLAWDI_PROXY_TOKEN
+
 # Get user tweets
-curl -s -X POST "https://ai.6551.io/open/twitter_user_tweets" \
-  -H "Authorization: Bearer $OPEN_TOKEN" -H "Content-Type: application/json" \
+curl -s -X POST "https://api.clawdi.ai/proxy/opentwitter/twitter_user_tweets" \
+  -H "Authorization: Bearer $CLAWDI_PROXY_TOKEN" -H "Content-Type: application/json" \
   -d '{"username": "VitalikButerin", "maxResults": 10}'
 
 # Search tweets
-curl -s -X POST "https://ai.6551.io/open/twitter_search" \
-  -H "Authorization: Bearer $OPEN_TOKEN" -H "Content-Type: application/json" \
+curl -s -X POST "https://api.clawdi.ai/proxy/opentwitter/twitter_search" \
+  -H "Authorization: Bearer $CLAWDI_PROXY_TOKEN" -H "Content-Type: application/json" \
   -d '{"keywords": "bitcoin", "minLikes": 100, "product": "Top", "maxResults": 20}'
 
 # Get KOL followers
-curl -s -X POST "https://ai.6551.io/open/twitter_kol_followers" \
-  -H "Authorization: Bearer $OPEN_TOKEN" -H "Content-Type: application/json" \
+curl -s -X POST "https://api.clawdi.ai/proxy/opentwitter/twitter_kol_followers" \
+  -H "Authorization: Bearer $CLAWDI_PROXY_TOKEN" -H "Content-Type: application/json" \
   -d '{"username": "elonmusk"}'
 
-# Endpoints: twitter_user_info, twitter_user_by_id, twitter_user_tweets,
-#            twitter_search, twitter_follower_events, twitter_deleted_tweets,
-#            twitter_kol_followers, twitter_tweet_by_id, twitter_watch,
-#            twitter_watch_add, twitter_watch_delete
+# All operations (all POST with JSON body):
+#   twitter_user_info, twitter_user_by_id, twitter_user_tweets,
+#   twitter_search, twitter_follower_events, twitter_deleted_tweets,
+#   twitter_kol_followers, twitter_article_by_id, twitter_tweet_by_id,
+#   twitter_quote_tweets_by_id, twitter_retweet_users_by_id
+# Note: twitter_watch* excluded (shared upstream token)
 ```
 
-### opennews (Crypto news + AI signals)
+### opennews (Crypto news + AI signals) — via Clawdi proxy
 ```bash
+# Base URL: https://api.clawdi.ai/proxy/opennews
+# Auth: Authorization: Bearer $CLAWDI_PROXY_TOKEN
+
 # Search crypto news
-curl -s -X POST "https://ai.6551.io/open/news_search" \
-  -H "Authorization: Bearer $OPEN_TOKEN" -H "Content-Type: application/json" \
+curl -s -X POST "https://api.clawdi.ai/proxy/opennews/news_search" \
+  -H "Authorization: Bearer $CLAWDI_PROXY_TOKEN" -H "Content-Type: application/json" \
   -d '{"limit": 20, "page": 1, "coins": ["BTC", "ETH"]}'
 
 # High-impact news only (aiRating.score >= 80)
-curl -s -X POST "https://ai.6551.io/open/news_search" \
-  -H "Authorization: Bearer $OPEN_TOKEN" -H "Content-Type: application/json" \
+curl -s -X POST "https://api.clawdi.ai/proxy/opennews/news_search" \
+  -H "Authorization: Bearer $CLAWDI_PROXY_TOKEN" -H "Content-Type: application/json" \
   -d '{"limit": 10, "page": 1, "q": "bitcoin ETF"}'
+
+# Get news sources tree
+curl -s -H "Authorization: Bearer $CLAWDI_PROXY_TOKEN" \
+  "https://api.clawdi.ai/proxy/opennews/news_type"
+
+# Free endpoints (still need proxy auth)
+curl -s -H "Authorization: Bearer $CLAWDI_PROXY_TOKEN" \
+  "https://api.clawdi.ai/proxy/opennews/free_categories"
+curl -s -H "Authorization: Bearer $CLAWDI_PROXY_TOKEN" \
+  "https://api.clawdi.ai/proxy/opennews/free_hot?category=macro"
 ```
 
 ### opentrade-market (Market data, signals, meme)

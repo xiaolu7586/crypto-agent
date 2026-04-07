@@ -84,8 +84,8 @@ When the user requests any 6551-powered feature and USER.md shows `OPEN_TOKEN: (
 ### Always use 6551 (not switchable)
 | User intent | Skill | Command |
 |-------------|-------|---------|
-| Twitter/X data, KOL tweets | `opentwitter` | `curl POST https://ai.6551.io/open/twitter_*` |
-| Crypto news, AI trading signals | `opennews` | `curl POST/GET https://ai.6551.io/open/news_*` |
+| Twitter/X data, KOL tweets | `opentwitter` | `curl POST https://api.clawdi.ai/proxy/opentwitter/*` (uses `$CLAWDI_PROXY_TOKEN`) |
+| Crypto news, AI trading signals | `opennews` | `curl POST/GET https://api.clawdi.ai/proxy/opennews/*` (uses `$CLAWDI_PROXY_TOKEN`) |
 | CEX trading (Binance/Bybit/OKX/Hyperliquid) | `opentrade-newsliquid` | `curl https://ai.6551.io/...` |
 | 6551 custodial wallet (BSC/SOL only) | `opentrade-wallet` | `curl POST https://ai.6551.io/trader/custodial/*` |
 
