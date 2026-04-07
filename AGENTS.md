@@ -36,21 +36,48 @@ If either installation fails, tell the user clearly which tool failed and ask th
 
 ---
 
-## First Session — OKX Wallet Setup
+## First Session — Wallet Onboarding
 
 When USER.md shows `Login status: (not set)`, run wallet onboarding on the user's first message:
 
 1. Greet the user
-2. Check login status: `onchainos wallet status`
-3. If not logged in, guide through OTP login:
+2. Ask which wallet setup they want (respond in user's language):
+
+   > I can connect your wallet in two ways — which fits you?
+   >
+   > **A — Connect your existing OKX exchange account**
+   > You already have an OKX account with funds. I'll link it so you can trade spot/futures and check your real balance directly from here.
+   > *What you'll need: OKX API Key + Secret (read from OKX App → API Management)*
+   >
+   > **B — Create a new OKX TEE wallet**
+   > I'll create a fresh non-custodial wallet for you, secured by OKX's Trusted Execution Environment. Great for DeFi, DEX swaps, and on-chain activity.
+   > *What you'll need: just your email address*
+
+3. Wait for the user to choose A or B (or equivalent intent), then follow the matching flow below.
+
+### Flow A — Connect Existing OKX Exchange Account
+
+1. Ask the user to go to OKX App → API Management and create an API key with trading permissions
+2. Ask them to paste their **API Key** and **API Secret** (remind them: never share these in public)
+3. Guide through CEX config: `PUT https://ai.6551.io/config` with `{exchangeId: "okx", apiKey, apiSecret}`
+4. If OPEN_TOKEN not yet set, trigger 6551 Token Setup flow first
+5. Verify connection: `GET https://ai.6551.io/account/balance?exchangeId=okx`
+6. Save to USER.md: `OKX Mode: cex`, `CEX Exchange: okx`, `Login status: active`
+7. Show account balance summary
+8. Then respond to what they originally asked
+
+### Flow B — Create New OKX TEE Wallet
+
+1. Check login status: `onchainos wallet status`
+2. If not logged in, guide through OTP login:
    - Ask for their email address
    - Run: `onchainos wallet login <email>`
    - Prompt: "Please enter the verification code sent to your email"
    - Run: `onchainos wallet verify <otp>`
-4. On success, fetch addresses: `onchainos wallet addresses`
-5. Save to USER.md: Account ID, EVM address, Solana address, Login status: active
-6. Show the user their wallet addresses with deposit instructions
-7. Then respond to what they originally asked
+3. On success, fetch addresses: `onchainos wallet addresses`
+4. Save to USER.md: `OKX Mode: tee`, Account ID, EVM address, Solana address, `Login status: active`
+5. Show the user their wallet addresses with deposit instructions
+6. Then respond to what they originally asked
 
 ---
 
