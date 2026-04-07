@@ -1,14 +1,13 @@
-## OKX Account
-- OKX Mode: (not set)  ← tee = new TEE wallet | cex = existing OKX exchange account
+## OKX TEE Wallet
+- Status: (not set)
 - Account ID: (not set)
-- Login status: (not set)
+- EVM address: (not set)
+- Solana address: (not set)
 
-## Wallet Addresses
-- EVM (all EVM chains): (not set)
-- Solana: (not set)
-
-## CEX Config
-- CEX Exchange: (not set)
+## OKX CEX Account
+- Status: (not set)
+- Exchange: okx
+- Connected: false
 
 ## 6551 Token
 - OPEN_TOKEN: (not set)

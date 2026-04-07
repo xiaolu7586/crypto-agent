@@ -38,46 +38,63 @@ If either installation fails, tell the user clearly which tool failed and ask th
 
 ## First Session — Wallet Onboarding
 
-When USER.md shows `Login status: (not set)`, run wallet onboarding on the user's first message:
+When both USER.md `OKX TEE Wallet.Status` and `OKX CEX Account.Connected` are `(not set)` / `false`, run onboarding on the user's first message.
 
-1. Greet the user
-2. Ask which wallet setup they want (respond in user's language):
+**Also trigger this when** a user who already has one wallet type asks to connect the other type (e.g. has TEE wallet but says "connect my OKX exchange account").
 
-   > I can connect your wallet in two ways — which fits you?
-   >
-   > **A — Connect your existing OKX exchange account**
-   > You already have an OKX account with funds. I'll link it so you can trade spot/futures and check your real balance directly from here.
-   > *What you'll need: OKX API Key + Secret (read from OKX App → API Management)*
-   >
-   > **B — Create a new OKX TEE wallet**
-   > I'll create a fresh non-custodial wallet for you, secured by OKX's Trusted Execution Environment. Great for DeFi, DEX swaps, and on-chain activity.
-   > *What you'll need: just your email address*
+### Step 1 — Ask what they want to set up
 
-3. Wait for the user to choose A or B (or equivalent intent), then follow the matching flow below.
+Respond in user's language:
 
-### Flow A — Connect Existing OKX Exchange Account
+> Welcome! Before we start, let me connect your wallet. I support two types — you can set up one or both:
+>
+> **A — OKX TEE Wallet** (for DeFi, DEX swaps, on-chain activity)
+> A new non-custodial wallet secured by OKX's Trusted Execution Environment.
+> *Need: just your email address*
+>
+> **B — OKX Exchange Account** (for spot & futures trading on OKX CEX)
+> Link your existing OKX account so you can trade with your real exchange balance.
+> *Need: OKX API Key + Secret (OKX App → API Management → Create API Key)*
+>
+> Which would you like to set up? (You can do both)
 
-1. Ask the user to go to OKX App → API Management and create an API key with trading permissions
-2. Ask them to paste their **API Key** and **API Secret** (remind them: never share these in public)
-3. Guide through CEX config: `PUT https://ai.6551.io/config` with `{exchangeId: "okx", apiKey, apiSecret}`
-4. If OPEN_TOKEN not yet set, trigger 6551 Token Setup flow first
-5. Verify connection: `GET https://ai.6551.io/account/balance?exchangeId=okx`
-6. Save to USER.md: `OKX Mode: cex`, `CEX Exchange: okx`, `Login status: active`
-7. Show account balance summary
-8. Then respond to what they originally asked
+Wait for user to indicate A, B, or both, then run the matching flow(s).
 
-### Flow B — Create New OKX TEE Wallet
+### Flow A — OKX TEE Wallet
 
-1. Check login status: `onchainos wallet status`
-2. If not logged in, guide through OTP login:
-   - Ask for their email address
+Skip if USER.md `OKX TEE Wallet.Status: active` already.
+
+1. Check: `onchainos wallet status`
+2. If not logged in:
+   - Ask for email address
    - Run: `onchainos wallet login <email>`
-   - Prompt: "Please enter the verification code sent to your email"
+   - Prompt for OTP: "Please enter the verification code sent to your email"
    - Run: `onchainos wallet verify <otp>`
-3. On success, fetch addresses: `onchainos wallet addresses`
-4. Save to USER.md: `OKX Mode: tee`, Account ID, EVM address, Solana address, `Login status: active`
-5. Show the user their wallet addresses with deposit instructions
-6. Then respond to what they originally asked
+3. On success: `onchainos wallet addresses`
+4. Save to USER.md under `## OKX TEE Wallet`:
+   - `Status: active`
+   - `Account ID: <id>`
+   - `EVM address: <0x...>`
+   - `Solana address: <sol...>`
+5. Show wallet addresses + deposit instructions
+
+### Flow B — OKX CEX Account
+
+Skip if USER.md `OKX CEX Account.Connected: true` already.
+
+1. If OPEN_TOKEN not yet set, trigger **6551 Token Setup** first
+2. Ask user to go to OKX App → API Management and create an API key with **Read + Trade** permissions
+3. Ask them to paste their **API Key** and **API Secret**
+4. Configure: `PUT https://ai.6551.io/config` with `{"exchangeId": "okx", "apiKey": "<key>", "apiSecret": "<secret>"}`
+5. Verify: `GET https://ai.6551.io/account/balance?exchangeId=okx`
+6. Save to USER.md under `## OKX CEX Account`:
+   - `Status: active`
+   - `Connected: true`
+7. Show exchange balance summary
+
+### If user chooses both A + B
+
+Run Flow A first, then Flow B. After both complete, confirm both are active and explain what each is for.
 
 ---
 
@@ -91,6 +108,27 @@ When the user requests any 6551-powered feature and USER.md shows `OPEN_TOKEN: (
 2. Ask them to paste the token
 3. Save to USER.md: `OPEN_TOKEN: <token>`
 4. Proceed immediately — do not ask for Base URL, endpoint paths, or any other technical details
+
+---
+
+## Dual Wallet Routing
+
+When the user has both OKX TEE Wallet and OKX CEX Account active, use this table to resolve ambiguous requests:
+
+| Intent | Route | Reason |
+|--------|-------|--------|
+| DEX swap / on-chain swap | TEE wallet (onchainos) | On-chain operation |
+| DeFi deposit / withdraw | TEE wallet (onchainos) | On-chain operation |
+| Send to external address | TEE wallet (onchainos) | On-chain operation |
+| Cross-chain bridge | TEE wallet (onchainos) | On-chain operation |
+| "buy/sell BTC/ETH" with no chain context | CEX account (opentrade-newsliquid) | CEX phrasing implies exchange |
+| "open long/short", futures, leverage | CEX account (opentrade-newsliquid) | CEX only |
+| "my OKX balance" / "check balance" | **Show both** — label each clearly | Ambiguous |
+| "check my exchange balance" | CEX account | Explicit |
+| "check my wallet balance" / "on-chain balance" | TEE wallet | Explicit |
+| "transfer from OKX to wallet" | Ask user to clarify direction | Ambiguous |
+
+When intent is ambiguous and both wallets are active, **show both balances labeled** rather than asking the user to clarify first.
 
 ---
 
