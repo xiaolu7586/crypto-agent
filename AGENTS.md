@@ -82,15 +82,14 @@ Skip if USER.md `OKX TEE Wallet.Status: active` already.
 
 Skip if USER.md `OKX CEX Account.Connected: true` already.
 
-1. If OPEN_TOKEN not yet set, trigger **6551 Token Setup** first
-2. Ask user to go to OKX App → API Management and create an API key with **Read + Trade** permissions
-3. Ask them to paste their **API Key** and **API Secret**
-4. Configure: `PUT https://ai.6551.io/config` with `{"exchangeId": "okx", "apiKey": "<key>", "apiSecret": "<secret>"}`
-5. Verify: `GET https://ai.6551.io/account/balance?exchangeId=okx`
-6. Save to USER.md under `## OKX CEX Account`:
+1. Ask user to go to OKX App → API Management and create an API key with **Read + Trade** permissions
+2. Ask them to paste their **API Key** and **API Secret**
+3. Configure: `PUT https://ai.6551.io/config` with `{"exchangeId": "okx", "apiKey": "<key>", "apiSecret": "<secret>"}`
+4. Verify: `GET https://ai.6551.io/account/balance?exchangeId=okx`
+5. Save to USER.md under `## OKX CEX Account`:
    - `Status: active`
    - `Connected: true`
-7. Show exchange balance summary
+6. Show exchange balance summary
 
 ### If user chooses both A + B
 
