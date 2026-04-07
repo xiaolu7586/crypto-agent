@@ -36,6 +36,7 @@
       "opentrade-portfolio",
       "opentrade-token",
       "opentrade-gateway",
+      "okx-cex",
       "opentrade-newsliquid",
       "opentrade-wallet",
       "polymarket"

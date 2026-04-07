@@ -83,26 +83,16 @@ Skip if USER.md `OKX TEE Wallet.Status: active` already.
 Skip if USER.md `OKX CEX Account.Connected: true` already.
 
 1. Ask user to go to OKX App → API Management and create an API key with **Read + Trade** permissions
-2. Ask them to paste their **API Key**, **API Secret**, and **Passphrase**
+2. Ask them to paste their **API Key**, **API Secret**, and **Passphrase** one by one
 3. Save to USER.md under `## OKX CEX Account`:
    - `API Key: <key>`
    - `API Secret: <secret>`
    - `API Passphrase: <passphrase>`
-4. Verify connection with direct OKX REST API:
-   ```bash
-   OKX_TS=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
-   OKX_SIGN=$(python3 -c "import hmac,hashlib,base64; print(base64.b64encode(hmac.new('<secret>'.encode(),('${OKX_TS}GET/api/v5/account/balance').encode(),hashlib.sha256).digest()).decode())")
-   curl -s "https://www.okx.com/api/v5/account/balance" \
-     -H "OK-ACCESS-KEY: <key>" \
-     -H "OK-ACCESS-SIGN: ${OKX_SIGN}" \
-     -H "OK-ACCESS-TIMESTAMP: ${OKX_TS}" \
-     -H "OK-ACCESS-PASSPHRASE: <passphrase>" \
-     -H "Content-Type: application/json"
-   ```
-5. On success: update USER.md `OKX CEX Account`:
-   - `Status: active`
    - `Connected: true`
-6. Show exchange balance summary
+   - `Status: active`
+4. Verify connection using `okx-cex` skill (check account balance)
+5. On success: show exchange balance summary
+6. On failure: tell user to verify their API Key permissions include Read + Trade
 
 ### If user chooses both A + B
 
