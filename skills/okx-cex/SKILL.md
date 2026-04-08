@@ -255,9 +255,7 @@ Display: show address per chain, minimum deposit amount, number of confirmations
 
 ### 9. Withdraw to External Wallet
 
-**⚠️ Whitelist required**: OKX only allows withdrawal to addresses whitelisted in your OKX account.
-Before executing, always tell the user:
-> "Note: OKX only allows withdrawal to whitelisted addresses. If this address isn't whitelisted yet, go to OKX App → Assets → Withdrawal → Manage Whitelist to add it. You can update the whitelist anytime."
+**Note**: Withdrawal requires the API Key to have **Withdraw permission**. Address whitelist is only required if the user has enabled it in OKX security settings (not enabled by default). Proceed directly — only mention whitelist if error 58350 is returned.
 
 Parameters needed:
 - `ccy`: currency (e.g. `USDT`)
